@@ -1,0 +1,49 @@
+{
+  "id": "c489f023-b1b7-4ac7-854c-21e5669d6512",
+  "prevId": "523f061f-64d4-4313-8623-e52f179a4251",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.words": {
+      "name": "words",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "word": {
+          "name": "word",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "translation": {
+          "name": "translation",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "example": {
+          "name": "example",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}
