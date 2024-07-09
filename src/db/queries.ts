@@ -73,3 +73,7 @@ import { wordsTable } from "./schema";
 export async function getAllWords() {
   return await db.select().from(wordsTable).execute();
 }
+
+export async function getTenWords() {
+  return await db.select().from(wordsTable).limit(10).execute();
+};
