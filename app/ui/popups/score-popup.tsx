@@ -1,7 +1,8 @@
-import React from 'react';
+import React from "react";
+import Link from "next/link";
 
 interface ScorePopuppRrops {
-  score: string
+  score: number;
 }
 
 const ScorePopup: React.FC<ScorePopuppRrops> = ({ score }) => {
@@ -11,12 +12,12 @@ const ScorePopup: React.FC<ScorePopuppRrops> = ({ score }) => {
         <h2 className="text-2xl font-bold mb-4 text-center">Game Over!</h2>
         <p className="text-lg mb-4 text-center">Your Score: {score}</p>
         <div className="flex justify-center">
-          <button
+          <Link
+            href="/training"
             className="bg-blue text-white px-4 py-2 rounded-md mr-2"
-            // onClick={onClose}
           >
             Close
-          </button>
+          </Link>
         </div>
       </div>
     </div>

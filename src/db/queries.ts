@@ -76,4 +76,4 @@ export async function getAllWords() {
 
 export async function getTenWords() {
   return await db.select().from(wordsTable).limit(10).execute();
-};
+}

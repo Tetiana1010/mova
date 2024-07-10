@@ -33,7 +33,10 @@ const MyWords: React.FC<MyWordsProps> = ({ words }) => {
       <BackButton />
       <div className="text-center my-5">
         <div className="flex justify-between items-center">
-          <h1 className="text-4xl font-bold mb-4 text-slate-900">Dictionary</h1>
+          <h1 className="text-4xl font-bold mb-4 text-slate-900">
+            Dictionary
+            <span className="text-3xl pl-2">({wordList.length})</span>
+          </h1>
           <div>
             <button
               className="bg-green text-white p-2 rounded"

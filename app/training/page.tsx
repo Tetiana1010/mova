@@ -1,15 +1,16 @@
-import TrainingCard from '../ui/trainings/training-card';
+import TrainingCard from "../ui/trainings/training-card";
 
 const trainings = [
   {
-    title: 'Word Translation',
-    description: 'Practice translating words from one language to another.',
-    link: '/training/word-translation'
+    title: "Word Translation",
+    description: "Practice translating words from one language to another.",
+    link: "/training/word-translation",
   },
   {
-    title: 'Word Constructor',
-    description: 'Improve your vocabulary by constructing words from given letters.',
-    link: '/training/word-constructor'
+    title: "Word Constructor",
+    description:
+      "Improve your vocabulary by constructing words from given letters.",
+    link: "/training/word-constructor",
   },
 ];
 
@@ -29,4 +30,4 @@ export default function Home() {
       </div>
     </div>
   );
-};
+}
