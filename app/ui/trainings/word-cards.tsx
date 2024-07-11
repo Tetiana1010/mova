@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import WordCard from "./word-card";
 import ScorePopup from "@/app/ui/popups/score-popup";
 import { Word } from "@/src/db/schema";
+import { updateScore } from "@/src/db/mutations";
 
 interface WordCardsProps {
   words: Word[];
@@ -14,6 +15,7 @@ const WordCards: React.FC<WordCardsProps> = ({ words }) => {
   const [options, setOptions] = useState<string[]>([]);
   const [score, setScore] = useState<number>(0);
   const [trainingOver, setTrainingOver] = useState<boolean>(false);
+  // const [result, setResult] = useState<Record<string, number>>({});
 
   useEffect(() => {
     if (index < words.length) {
@@ -36,6 +38,8 @@ const WordCards: React.FC<WordCardsProps> = ({ words }) => {
     }
   }, [index, words]);
 
+  console.log(words);
+
   const getRandomWord = (wordList: Word[], excluded: string[]): string => {
     const filteredWords = wordList.filter(
       (word) => !excluded.includes(word.word),
@@ -52,8 +56,16 @@ const WordCards: React.FC<WordCardsProps> = ({ words }) => {
     return array;
   };
 
-  const handleOptionClick = (selectedWord: string): void => {
+  const handleOptionClick = async (selectedWord: string): Promise<void> => {
     const correctAnswer = selectedWord === words[index].word;
+
+    // setResult(prevResult => ({
+    //   ...prevResult,
+    //   [words[index].word]: +correctAnswer
+    // }));
+
+    await updateScore(words[index].word, +correctAnswer);
+
     if (correctAnswer) {
       setScore((prevScore) => prevScore + 10);
     }

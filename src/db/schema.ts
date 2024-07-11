@@ -26,6 +26,7 @@ export const wordsTable = pgTable("words", {
   word: text("word").notNull(),
   translation: text("translation").notNull(),
   example: text("example").notNull(),
+  score: integer("score").default(0),
 });
 
 export type Word = InferSelectModel<typeof wordsTable>;

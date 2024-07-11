@@ -15,6 +15,13 @@
       "when": 1719762175189,
       "tag": "0001_wonderful_gressill",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1720702277047,
+      "tag": "0002_lucky_slipstream",
+      "breakpoints": true
     }
   ]
 }

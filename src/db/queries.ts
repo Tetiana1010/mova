@@ -1,5 +1,6 @@
 "use server";
 
+import { sql } from "drizzle-orm";
 // import { asc, between, count, eq, getTableColumns, sql } from 'drizzle-orm';
 // import { db } from './index';
 // import { InsertUser, SelectUser, postsTable, usersTable } from './schema';
@@ -75,5 +76,10 @@ export async function getAllWords() {
 }
 
 export async function getTenWords() {
-  return await db.select().from(wordsTable).limit(10).execute();
+  return await db
+    .select()
+    .from(wordsTable)
+    .orderBy(sql`RANDOM()`)
+    .limit(10)
+    .execute();
 }
