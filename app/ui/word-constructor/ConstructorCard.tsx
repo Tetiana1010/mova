@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { useDrag, useDrop, DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 import { Word } from "@/src/db/schema";
+import CheckIcon from "../icons/check-icon";
 
 interface ConstructorCardProps {
   word: Word;
+  onClick: (constructedWord: string) => void;
 }
 
 const shuffleArray = (array: string[]): string[] => {
@@ -14,24 +18,94 @@ const shuffleArray = (array: string[]): string[] => {
   return shuffledArray;
 };
 
-const ConstructorCard: React.FC<ConstructorCardProps> = ({ word }) => {
+interface DraggableLetterProps {
+  letter: string;
+  index: number;
+  from: string;
+  moveLetter: (from: string, letter: string, index: number) => void;
+}
+
+const DraggableLetter: React.FC<DraggableLetterProps> = ({ letter, index, from, moveLetter }) => {
+  const [, drag] = useDrag({
+    type: "LETTER",
+    item: { letter, index, from },
+  });
+
+  return (
+    <div
+      ref={drag}
+      className="bg-blue text-white px-4 py-2 m-1 rounded cursor-pointer shadow-md hover:bg-blue-700 transition duration-300"
+    >
+      {letter}
+    </div>
+  );
+};
+
+interface DropZoneProps {
+  accept: string;
+  onDrop: (item: { letter: string, index: number, from: string }) => void;
+  children: React.ReactNode;
+}
+
+const DropZone: React.FC<DropZoneProps> = ({ accept, onDrop, children }) => {
+  const [, drop] = useDrop({
+    accept,
+    drop: (item) => onDrop(item),
+  });
+
+  return (
+    <div
+      ref={drop}
+      className="border border-dashed border-gray-500 p-4 min-h-[50px] flex flex-wrap gap-2 bg-gray-100 rounded"
+    >
+      {children}
+    </div>
+  );
+};
+
+const ConstructorCard: React.FC<ConstructorCardProps> = ({ word, onClick }) => {
   const [shuffledLetters, setShuffledLetters] = useState<string[]>([]);
+  const [constructedWord, setConstructedWord] = useState<string[]>([]);
 
   useEffect(() => {
     setShuffledLetters(shuffleArray(Array.from(word.word)));
+    setConstructedWord([]);
   }, [word.word]);
 
+  const moveLetter = (from: string, letter: string, index: number) => {
+    if (from === "shuffled") {
+      setShuffledLetters((prev) => prev.filter((_, i) => i !== index));
+      setConstructedWord((prev) => [...prev, letter]);
+    } else {
+      setConstructedWord((prev) => prev.filter((_, i) => i !== index));
+      setShuffledLetters((prev) => [...prev, letter]);
+    }
+  };
+
   return (
-    <div className="flex space-x-2">
-      {shuffledLetters.map((letter, index) => (
-        <div 
-          key={index} 
-          className="bg-blue text-white px-4 py-2 rounded cursor-pointer"
-        >
-          {letter}
+    <DndProvider backend={HTML5Backend}>
+      <div className="flex flex-col space-y-4 md:space-y-0 md:space-x-4 p-4">
+        <div className="flex-1">
+          <h3 className="text-lg font-semibold mb-2">Shuffled Letters</h3>
+          <DropZone accept="LETTER" onDrop={(item) => moveLetter(item.from, item.letter, item.index)}>
+            {shuffledLetters.map((letter, index) => (
+              <DraggableLetter key={index} letter={letter} index={index} from="shuffled" moveLetter={moveLetter} />
+            ))}
+          </DropZone>
         </div>
-      ))}
-    </div>
+        <div className="flex-1">
+          <h3 className="text-lg font-semibold mb-2">Constructed Word</h3>
+          <DropZone accept="LETTER" onDrop={(item) => moveLetter(item.from, item.letter, item.index)}>
+            {constructedWord.map((letter, index) => (
+              <DraggableLetter key={index} letter={letter} index={index} from="constructed" moveLetter={moveLetter} />
+            ))}
+          </DropZone>
+        </div>
+        <button disabled={shuffledLetters.length > 0} onClick={() => onClick(constructedWord.join(''))}>
+            <CheckIcon />
+        </button>
+      </div>
+    </DndProvider>
   );
 };
 
