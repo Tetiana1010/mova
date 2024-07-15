@@ -33,7 +33,7 @@ const DraggableLetter: React.FC<DraggableLetterProps> = ({ letter, index, from, 
 
   return (
     <div
-      ref={drag}
+      ref={drag as any}
       className="bg-blue text-white px-4 py-2 m-1 rounded cursor-pointer shadow-md hover:bg-blue-700 transition duration-300"
     >
       {letter}
@@ -48,14 +48,14 @@ interface DropZoneProps {
 }
 
 const DropZone: React.FC<DropZoneProps> = ({ accept, onDrop, children }) => {
-  const [, drop] = useDrop({
+  const [, drop] = useDrop<{ letter: string, index: number, from: string }>({
     accept,
     drop: (item) => onDrop(item),
   });
 
   return (
     <div
-      ref={drop}
+      ref={drop as any}
       className="border border-dashed border-gray-500 p-4 min-h-[50px] flex flex-wrap gap-2 bg-gray-100 rounded"
     >
       {children}
