@@ -32,7 +32,7 @@ const DictionaryCard: React.FC<WordProps> = ({ word }) => {
           <p className="mt-auto text-slate-500 text-sm">{word.example}</p>
         </div>
         <div className="flex gap-2 items-start">
-          <ChartIcon score={word.score ?? 0} />
+          <ChartIcon score={word.score ?? 0.0} />
           <button onClick={toggleForm}>
             <EditIcon />
           </button>
