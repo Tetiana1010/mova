@@ -56,7 +56,7 @@ const DropZone: React.FC<DropZoneProps> = ({ accept, onDrop, children }) => {
   return (
     <div
       ref={drop as any}
-      className="border border-dashed border-gray-500 p-4 min-h-[50px] flex flex-wrap gap-2 bg-gray-100 rounded"
+      className="border border-dashed border-gray-500 p-4 min-h-[50px] flex flex-wrap gap-2  rounded"
     >
       {children}
     </div>
@@ -84,7 +84,7 @@ const ConstructorCard: React.FC<ConstructorCardProps> = ({ word, onClick }) => {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="flex flex-col space-y-4 md:space-y-0 md:space-x-4 p-4">
+      <div className="flex flex-col gap-4 p-4">
         <div className="flex-1">
           <h3 className="text-lg font-semibold mb-2">Shuffled Letters</h3>
           <DropZone accept="LETTER" onDrop={(item) => moveLetter(item.from, item.letter, item.index)}>
@@ -101,8 +101,12 @@ const ConstructorCard: React.FC<ConstructorCardProps> = ({ word, onClick }) => {
             ))}
           </DropZone>
         </div>
-        <button disabled={shuffledLetters.length > 0} onClick={() => onClick(constructedWord.join(''))}>
-            <CheckIcon />
+        <button
+          disabled={shuffledLetters.length > 0}
+          onClick={() => onClick(constructedWord.join(''))}
+          className="self-center bg-green text-white px-4 py-2 flex justify-center rounded shadow-md transition duration-300 "
+        >
+          <CheckIcon />
         </button>
       </div>
     </DndProvider>
