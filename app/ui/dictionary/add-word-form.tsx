@@ -2,9 +2,7 @@ import React from "react";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { toast } from "sonner";
-
 import { createWord } from "@/src/db/mutations";
-
 import XIcon from "../icons/x-icon";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -42,8 +40,8 @@ const AddWordForm: React.FC<AddWordFormProps> = ({ handleToggle }) => {
     name: keyof FormValues,
     type: string,
     placeholder: string,
-    errors: any,
-    touched: any,
+    errors: { [key: string]: string },
+    touched: { [key: string]: boolean }
   ) => (
     <div className="mb-4 relative">
       <label
@@ -66,10 +64,27 @@ const AddWordForm: React.FC<AddWordFormProps> = ({ handleToggle }) => {
       ) : null}
     </div>
   );
-  const queryCache = useQueryClient();
+
+  const queryClient = useQueryClient();
+
+  const handleSubmit = async (
+    { word, translation, example }: FormValues,
+    { resetForm }: { resetForm: () => void }
+  ) => {
+    toast.promise(createWord(word, translation, example ?? ""), {
+      loading: "Creating word",
+      success: (data) => {
+        handleToggle();
+        queryClient.refetchQueries({ queryKey: ["words"] });
+        resetForm();
+        return `Word ${data.word} created!`;
+      },
+      error: (err) => `Error: ${err.message}`,
+    });
+  };
 
   return (
-    <div className="absolute inset-0 bg-white flex items-center justify-center z-10">
+    <div className="fixed inset-0 bg-white flex items-center justify-center z-10">
       <div className="bg-white p-8 rounded-lg shadow-lg w-1/2">
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-2xl font-bold text-center">Add a New Word</h1>
@@ -84,19 +99,7 @@ const AddWordForm: React.FC<AddWordFormProps> = ({ handleToggle }) => {
         <Formik
           initialValues={initialValues}
           validationSchema={newWordSchema}
-          onSubmit={async ({ translation, word, example }) => {
-            toast.promise(createWord(word, translation, example ?? ""), {
-              loading: "Creating word",
-              success: (data) => {
-                handleToggle();
-                queryCache.refetchQueries({
-                  queryKey: ["words"],
-                });
-                return `Word ${data.word} created!`;
-              },
-              error: (err) => `Error: ${err.message}`,
-            });
-          }}
+          onSubmit={handleSubmit}
         >
           {({ errors, touched }) => (
             <Form>
@@ -106,7 +109,7 @@ const AddWordForm: React.FC<AddWordFormProps> = ({ handleToggle }) => {
                 "text",
                 "Enter the word",
                 errors,
-                touched,
+                touched
               )}
               {renderField(
                 "Translation",
@@ -114,7 +117,7 @@ const AddWordForm: React.FC<AddWordFormProps> = ({ handleToggle }) => {
                 "text",
                 "Enter the translation",
                 errors,
-                touched,
+                touched
               )}
               {renderField(
                 "Example of usage",
@@ -122,7 +125,7 @@ const AddWordForm: React.FC<AddWordFormProps> = ({ handleToggle }) => {
                 "text",
                 "Enter the example of usage",
                 errors,
-                touched,
+                touched
               )}
 
               <div className="flex items-center justify-between">

@@ -72,7 +72,7 @@ const EditWordForm: React.FC<EditWordFormProps> = ({ word, handleToggle }) => {
   const queryCache = useQueryClient();
 
   return (
-    <div className="absolute inset-0 bg-white flex items-center justify-center z-10">
+    <div className="fixed inset-0 bg-white flex items-center justify-center z-30">
       <div className="bg-white p-8 rounded-lg shadow-lg w-1/2">
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-2xl font-bold text-center">Edit</h1>
